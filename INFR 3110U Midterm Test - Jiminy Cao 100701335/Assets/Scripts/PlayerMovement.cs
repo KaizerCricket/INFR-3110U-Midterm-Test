@@ -10,7 +10,11 @@ public class PlayerMovement : MonoBehaviour
     void Update() {
         CharacterController controller = GetComponent<CharacterController>();
 
-        controller.SimpleMove(transform.TransformDirection(Vector3.forward) * speed * Input.GetAxis("Vertical")
-                            + transform.TransformDirection(Vector3.right) * speed * Input.GetAxis("Horizontal"));
+        if (Input.GetAxis("Vertical") != 0) {
+            controller.SimpleMove(transform.TransformDirection(Vector3.forward) * speed * Input.GetAxis("Vertical"));
+        }
+        if (Input.GetAxis("Horizontal") != 0) {
+            controller.SimpleMove(transform.TransformDirection(Vector3.right) * speed * Input.GetAxis("Horizontal"));
+        }
     }
 }
