@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MB1 : MonoBehaviour
 {
-    private float speed = 2.0f;
+    public float speed = 3.0f;
 
     public GameObject player;
 
@@ -24,12 +24,11 @@ public class MB1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        if (transform.position.x <= 13.0f || transform.position.x >= 17.0f) {
-            speed *= -1.0f;
+        if (transform.position.x <= 13.0f) {
+            speed = 3.0f;
         }
-        if (speed < 0) {
-            player.transform.parent = null;
+        else if (transform.position.x >= 17.0f) {
+            speed = -3.0f;
         }
         transform.Translate(Vector3.right * Time.deltaTime * speed);
     }
