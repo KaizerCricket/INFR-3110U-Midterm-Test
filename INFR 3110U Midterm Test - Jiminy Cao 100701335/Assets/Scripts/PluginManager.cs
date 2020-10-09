@@ -29,12 +29,11 @@ public class PluginManager : MonoBehaviour {
 
     public void SaveTime() {
 
-        float currentTime = Time.time;
+        float currentTime = Time.timeSinceLevelLoad;
         float checkpointTime = currentTime - lastTime;
         lastTime = currentTime;
 
         SaveCheckpointTime(checkpointTime);
-        Debug.Log(checkpointTime);
     }
 
     public float LoadTime(int index) {
@@ -56,14 +55,17 @@ public class PluginManager : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        lastTime = Time.time;
+        lastTime = Time.timeSinceLevelLoad;
     }
 
     // Update is called once per frame
     void Update() {
-        text.GetComponent<Text>().text = "Time: " + (Math.Floor(Time.time * 100) / 100).ToString() + "s";
+        text.GetComponent<Text>().text = "Time: " + (Math.Floor(Time.timeSinceLevelLoad* 100) / 100).ToString() + "s";
     }
     private void OnDestroy() {
+        for(int i = 0; i < GetNumCheckpoints(); i++)
+        Stats.cps.Add(LoadTime(i));
+        Stats.total = LoadTotalTime();
         ResetLog();
     }
 }
