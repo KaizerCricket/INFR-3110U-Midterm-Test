@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
-    private float speed = 5.0F;
+    private float speed = 7.5F;
 
     void Update() {
         CharacterController controller = GetComponent<CharacterController>();
