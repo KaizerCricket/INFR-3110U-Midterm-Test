@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Unity.Profiling;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PluginManager : MonoBehaviour {
     const string DLL_NAME = "MidtermDLL";
@@ -23,9 +25,16 @@ public class PluginManager : MonoBehaviour {
     private static extern int GetNumCheckpoints();
 
     float lastTime = 0.0f;
+    public GameObject text;
 
-    public void SaveTime(float checkpointTime) {
+    public void SaveTime() {
+
+        float currentTime = Time.time;
+        float checkpointTime = currentTime - lastTime;
+        lastTime = currentTime;
+
         SaveCheckpointTime(checkpointTime);
+        Debug.Log(checkpointTime);
     }
 
     public float LoadTime(int index) {
@@ -37,7 +46,7 @@ public class PluginManager : MonoBehaviour {
         }
     }
 
-    public float LoadTotalTimeTest() {
+    public float LoadTotalTime() {
         return GetTotalTime();
     }
 
@@ -52,13 +61,7 @@ public class PluginManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (Input.GetKeyDown(KeyCode.O)) {
-            float currentTime = Time.time;
-            float checkpointTime = currentTime - lastTime;
-            lastTime = currentTime;
-
-            SaveTime(checkpointTime);
-        }
+        text.GetComponent<Text>().text = "Time: " + (Math.Floor(Time.time * 100) / 100).ToString() + "s";
     }
     private void OnDestroy() {
         ResetLog();

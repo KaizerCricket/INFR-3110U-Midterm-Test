@@ -12,6 +12,8 @@ public class EndPoint : MonoBehaviour
     private void OnTriggerEnter(Collider other) {
         if (other.gameObject == player) {
             SceneManager.LoadScene(2);
+            GameObject.Find("Logger").GetComponent<PluginManager>().SaveTime();
+            
             for (int i = 0; i<5; i++)
                 checkpoints[i].GetComponent<Checkpoint>().visited=false;
         }
