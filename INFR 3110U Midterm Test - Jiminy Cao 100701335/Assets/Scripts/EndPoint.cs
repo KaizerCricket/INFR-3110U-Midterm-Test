@@ -6,16 +6,22 @@ using UnityEngine.SceneManagement;
 
 public class EndPoint : MonoBehaviour
 {
+    // Reference to player
     public GameObject player;
+    // Reference to all checkpoints
     public List<GameObject> checkpoints = new List<GameObject>();
 
     private void OnTriggerEnter(Collider other) {
+
         if (other.gameObject == player) {
-            SceneManager.LoadScene(2);
+            // Calls DLL function to log time;
             GameObject.Find("Logger").GetComponent<PluginManager>().SaveTime();
-            
-            for (int i = 0; i<5; i++)
-                checkpoints[i].GetComponent<Checkpoint>().visited=false;
+            // Resets Checkpoints for future playthroughs
+            for (int i = 0; i < 5; i++) {
+                checkpoints[i].GetComponent<Checkpoint>().visited = false;
+            }
+            // Transitions player to stat/end screen
+            SceneManager.LoadScene(2);
         }
     }
 }

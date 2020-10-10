@@ -24,18 +24,24 @@ public class PluginManager : MonoBehaviour {
     [DllImport(DLL_NAME)]
     private static extern int GetNumCheckpoints();
 
+    // Time at previous Checkpoint
     float lastTime = 0.0f;
+    // Reference to text for onscreen timer
     public GameObject text;
 
+    // Function for logging current checkpoint
     public void SaveTime() {
-
+        // Gets current time since start of playthrough
         float currentTime = Time.timeSinceLevelLoad;
+        // Calculate time interval between previous and current checkpoint
         float checkpointTime = currentTime - lastTime;
+        // Stores time of current checkpoint
         lastTime = currentTime;
-
+        // Calls C++ function to add to checkpoint vector and total run time
         SaveCheckpointTime(checkpointTime);
     }
 
+    // Gets time interval at index
     public float LoadTime(int index) {
         if (index >= GetNumCheckpoints()) {
             return -1;
@@ -45,26 +51,32 @@ public class PluginManager : MonoBehaviour {
         }
     }
 
+    // Gets total run time
     public float LoadTotalTime() {
         return GetTotalTime();
     }
 
+    // Resets Logger
     public void ResetLog() {
         ResetLogger();
     }
 
-    // Start is called before the first frame update
+    // Starts up timer and clears static storage of checkpoint times
     void Start() {
         lastTime = Time.timeSinceLevelLoad;
+        Stats.cps.Clear();
     }
 
-    // Update is called once per frame
+    // Displays current total run time rounded to 2 decimals
     void Update() {
         text.GetComponent<Text>().text = "Time: " + (Math.Floor(Time.timeSinceLevelLoad* 100) / 100).ToString() + "s";
     }
+
+    // When transitioning scenes, stores log in Static Variables of Stats script and calls reset function
     private void OnDestroy() {
-        for(int i = 0; i < GetNumCheckpoints(); i++)
-        Stats.cps.Add(LoadTime(i));
+        for (int i = 0; i < GetNumCheckpoints(); i++) {
+            Stats.cps.Add(LoadTime(i));
+        }
         Stats.total = LoadTotalTime();
         ResetLog();
     }
